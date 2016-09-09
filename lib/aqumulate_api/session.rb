@@ -1,4 +1,13 @@
 module AqumulateAPI
+
+  class << self
+    attr_accessor :session
+  end
+
+  def self.session
+    @configuration ||= Session.new
+  end
+
   class Session
 
     attr_reader :config, :auth
@@ -37,6 +46,10 @@ module AqumulateAPI
       end
 
       response.parsed_response
+    end
+
+    def api_request(resource, body)
+
     end
 
   end
