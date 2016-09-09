@@ -49,7 +49,16 @@ module AqumulateAPI
     end
 
     def api_request(resource, body)
+      response = HTTParty.post(
+          "#{config.url}/api/#{resource}",
+          headers: {
+              'Accept' => 'application/json',
+              'Authorization' => "bearer #{auth['access_token']}"
+          },
+          body: body
+      )
 
+      handle_response response
     end
 
   end
