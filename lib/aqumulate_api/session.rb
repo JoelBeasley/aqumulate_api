@@ -5,7 +5,7 @@ module AqumulateAPI
   end
 
   def self.session
-    @configuration ||= Session.new
+    @session ||= Session.new
   end
 
   class Session
