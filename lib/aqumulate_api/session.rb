@@ -8,6 +8,10 @@ module AqumulateAPI
     @session ||= Session.new
   end
 
+  def self.session=(session)
+    @session = session
+  end
+
   class Session
 
     attr_reader :config, :auth

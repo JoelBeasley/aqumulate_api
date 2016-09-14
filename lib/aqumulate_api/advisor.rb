@@ -21,17 +21,14 @@ module AqumulateAPI
     attr_accessor :user_id, :password, :first_name, :last_name, :email, :phone, :ssn, :address_1, :address_2, :city,
                   :state, :zip, :country, :ce_user_id
 
-    attr_reader :session
-
-    def initialize(attributes = {}, session = AqumulateAPI.session)
+    def initialize(attributes = {})
       attributes.each { |k, v| instance_variable_set("@#{k}", v) }
-      @session = session
     end
 
-    def self.find(id, session = AqumulateAPI.session)
-      response = AggAdvisor.get_advisor_by_id({ 'CEUserID' => id }, session)
+    def self.find(id)
+      response = AggAdvisor.get_advisor_by_id({ 'CEUserID' => id })
 
-      advisor = new({}, session)
+      advisor = new
       advisor.first_name = response['AdvisorName'].split(' ').first
       advisor.last_name = response['AdvisorName'].split(' ').last
       advisor.email = response['AdvisorEmail']
@@ -40,14 +37,14 @@ module AqumulateAPI
       return advisor
     end
 
-    def self.all(session = AqumulateAPI.session)
+    def self.all
       response = AggAdvisor.get_advisors
       return [] unless response.has_key?('AdvisorList')
-      response['AdvisorList'].map { |source|  from_source(source, session) }
+      response['AdvisorList'].map { |source|  from_source(source) }
     end
 
-    def self.from_source(source, session)
-      advisor = new({}, session)
+    def self.from_source(source)
+      advisor = new
 
       ATTR_MAP.invert.each do |k, v|
         advisor.send("#{v.to_s}=", source[k])
