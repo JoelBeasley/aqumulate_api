@@ -17,7 +17,7 @@ module AqumulateAPI
     }
 
     methods.each do |method, definition|
-      define_method(method) do |body, session = AqumulateAPI.session|
+      define_method(method) do |body = {}, session = AqumulateAPI.session|
         session.api_request("#{self::RESOURCE}/#{definition[:method]}", body)
       end
     end
