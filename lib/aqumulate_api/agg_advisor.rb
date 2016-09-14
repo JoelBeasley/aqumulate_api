@@ -5,6 +5,7 @@ module AqumulateAPI
 
   AggAdvisor.singleton_class.class_eval do
     methods = {
+        get_advisors: { method: 'GetAdvisors' },
         add_advisor: { method: 'AddAdvisor' },
         advisor_sign_on: { method: 'AdvisorSignOn' },
         get_advisor_by_id: { method: 'GetAdvisorById' },
