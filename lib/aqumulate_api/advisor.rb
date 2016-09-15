@@ -50,6 +50,10 @@ module AqumulateAPI
       advisor
     end
 
+    def session_id(password = self.password)
+      @session_id ||= AggAdvisor.advisor_sign_on('UserId' => user_id, 'Password' => password)['SessionId']
+    end
+
     def save
       if ce_user_id.nil?
         create
