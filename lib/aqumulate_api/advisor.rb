@@ -8,7 +8,7 @@ module AqumulateAPI
         last_name: 'LastName',
         email: 'Email',
         phone: 'Phone',
-        ssn: 'SocialSecurityNumber',
+        ssn: 'SSN',
         address_1: 'Address1',
         address_2: 'Address2',
         city: 'City',
@@ -25,14 +25,11 @@ module AqumulateAPI
       attributes.each { |k, v| instance_variable_set("@#{k}", v) }
     end
 
-    def self.find(id)
-      response = AggAdvisor.get_advisor_by_id({ 'CEUserID' => id })
+    def self.find(user_id)
+      response = AggAdvisor.get_advisor_by_id({ 'UserId' => user_id })
 
-      advisor = new
-      advisor.first_name = response['AdvisorName'].split(' ').first
-      advisor.last_name = response['AdvisorName'].split(' ').last
-      advisor.email = response['AdvisorEmail']
-      advisor.ce_user_id = id
+      advisor = from_source(response)
+      advisor.user_id = user_id
 
       return advisor
     end
