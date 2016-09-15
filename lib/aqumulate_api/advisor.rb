@@ -67,6 +67,27 @@ module AqumulateAPI
       return true
     end
 
+    def add_account(financial_institution)
+      response = AggAccount.advisor_add_account(
+          {
+              'SessionId' => session_id,
+              'FIId' => financial_institution.id,
+              'FIType' => 'Advisor',
+
+              'FIFetchParamList' => [
+                  {
+                      'ParamName' => '50500603',
+                      'FIFetchParamValList' => [{ 'ParamVal' => '50500603' }]
+                  }
+              ],
+
+              'ParameterList' => financial_institution.login_parameters.map do |param|
+                [['ParamName', param.id.to_s], ['ParamVal', param.value]].to_h
+              end
+          }
+      )
+    end
+
     private
 
     def create

@@ -15,7 +15,7 @@ module AqumulateAPI
     }
 
     attr_accessor :id, :number, :type, :max_length, :size, :caption, :variable_name, :default_value, :editable,
-                  :sensitivity_code
+                  :sensitivity_code, :value
 
     def initialize(attributes = {})
       attributes.each { |k, v| instance_variable_set("@#{k}", v) }
