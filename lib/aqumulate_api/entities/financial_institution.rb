@@ -4,6 +4,7 @@ module AqumulateAPI
     SOURCE_ASSOCIATIONS = [
         { key: 'FILoginParameters', class: LoginParameter, attr: :login_parameters },
         { key: 'FiFetchParamList', class: FetchParameter, attr: :fetch_parameters },
+        { key: 'FiAccountDataList', class: AccountData, attr: :account_data },
     ]
 
     ATTR_MAP = {
@@ -12,7 +13,7 @@ module AqumulateAPI
         url: 'Url',
     }
 
-    attr_accessor :id, :name, :url, :login_parameters, :fetch_parameters
+    attr_accessor :id, :name, :url, :login_parameters, :fetch_parameters, :account_data
 
     def login_parameters
       @login_parameters ||= []
@@ -20,6 +21,10 @@ module AqumulateAPI
 
     def fetch_parameters
       @fetch_parameters ||= []
+    end
+
+    def account_data
+      @account_data ||= []
     end
 
     def self.find(id)
