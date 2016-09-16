@@ -1,5 +1,5 @@
 module AqumulateAPI
-  class Advisor
+  class Advisor < Entity
 
     ATTR_MAP = {
         user_id: 'UserId',
@@ -21,10 +21,6 @@ module AqumulateAPI
     attr_accessor :user_id, :password, :first_name, :last_name, :email, :phone, :ssn, :address_1, :address_2, :city,
                   :state, :zip, :country, :ce_user_id
 
-    def initialize(attributes = {})
-      attributes.each { |k, v| instance_variable_set("@#{k}", v) }
-    end
-
     def self.find(user_id)
       response = AggAdvisor.get_advisor_by_id({ 'UserId' => user_id })
 
@@ -38,16 +34,6 @@ module AqumulateAPI
       response = AggAdvisor.get_advisors
       return [] unless response.has_key?('AdvisorList')
       response['AdvisorList'].map { |source|  from_source(source) }
-    end
-
-    def self.from_source(source)
-      advisor = new
-
-      ATTR_MAP.invert.each do |k, v|
-        advisor.send("#{v.to_s}=", source[k])
-      end
-
-      advisor
     end
 
     def session_id(password = self.password)
@@ -67,23 +53,14 @@ module AqumulateAPI
       return true
     end
 
-    def add_account(financial_institution)
+    def add_account(fi_id, login_parameters, fetch_parameters = [])
       response = AggAccount.advisor_add_account(
           {
               'SessionId' => session_id,
-              'FIId' => financial_institution.id,
+              'FIId' => fi_id,
               'FIType' => 'Advisor',
-
-              'FIFetchParamList' => [
-                  {
-                      'ParamName' => '50500603',
-                      'FIFetchParamValList' => [{ 'ParamVal' => '50500603' }]
-                  }
-              ],
-
-              'ParameterList' => financial_institution.login_parameters.map do |param|
-                [['ParamName', param.id.to_s], ['ParamVal', param.value]].to_h
-              end
+              'FIFetchParamList' => fetch_parameters,
+              'ParameterList' => login_parameters
           }
       )
     end

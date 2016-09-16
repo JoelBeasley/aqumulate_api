@@ -1,5 +1,5 @@
 module AqumulateAPI
-  class Account
+  class Account < Entity
 
     ATTR_MAP = {
         id: 'AcctId',
@@ -15,7 +15,6 @@ module AqumulateAPI
         ownership: 'AccountOwnership',
         adv_access: 'AdvAccess',
         tracking_code: 'TrackingCode',
-        account_balances: 'LastSuccessfulUpdate',
         last_update_status_code: 'LastUpdateStatusCode',
         last_update_status_msg: 'LastUpdateStatusMsg',
         last_update_status_msg_fi: 'LastUpdateStatusMessageAtFI',
@@ -23,14 +22,15 @@ module AqumulateAPI
         last_update: 'LastSuccessfulUpdate'
     }
 
+    SOURCE_ASSOCIATIONS = [
+        { key: 'AccountBalances', class: AccountBalance, attr: :account_balances },
+        { key: 'Positions', class: Position, attr: :positions }
+    ]
+
     attr_accessor :id, :login_account_id, :added_by, :financial_institution_id, :account_type, :account_type_extended,
                   :nick_name, :update_error_code, :retirement_status, :instrument, :ownership, :adv_access,
                   :tracking_code, :last_update_status_code, :last_update_status_msg, :last_update_status_msg_fi,
-                  :last_update_attempt, :last_update
-
-    def initialize(attributes = {})
-      attributes.each { |k, v| instance_variable_set("@#{k}", v) }
-    end
+                  :last_update_attempt, :last_update, :account_balances, :positions
 
     def self.find(advisor, fi_id = nil)
       body = { 'SessionId' => advisor.session_id }
@@ -40,24 +40,6 @@ module AqumulateAPI
       return [] unless response.has_key?('Accounts')
 
       response['Accounts'].map { |source| from_source(source) }
-    end
-
-    def self.from_source(source)
-      account = new
-
-      ATTR_MAP.invert.each do |k, v|
-        account.send("#{v.to_s}=", source[k])
-      end
-
-      source['AccountBalances'].each do |acct_bal_source|
-        account.account_balances << AccountBalance.from_source(acct_bal_source)
-      end
-
-      source['Positions'].each do |pos_source|
-        account.positions << Position.from_source(pos_source)
-      end
-
-      account
     end
 
     def account_balances

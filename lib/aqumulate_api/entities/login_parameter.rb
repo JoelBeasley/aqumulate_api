@@ -1,5 +1,5 @@
 module AqumulateAPI
-  class FinancialInstitutionLoginParameter
+  class LoginParameter < Entity
 
     ATTR_MAP = {
         id: 'ParameterId',
@@ -16,20 +16,5 @@ module AqumulateAPI
 
     attr_accessor :id, :number, :type, :max_length, :size, :caption, :variable_name, :default_value, :editable,
                   :sensitivity_code, :value
-
-    def initialize(attributes = {})
-      attributes.each { |k, v| instance_variable_set("@#{k}", v) }
-    end
-
-    def self.from_source(source)
-      login_parameter = new({})
-
-      ATTR_MAP.invert.each do |k, v|
-        login_parameter.send("#{v.to_s}=", source[k])
-      end
-
-      login_parameter
-    end
-
   end
 end
