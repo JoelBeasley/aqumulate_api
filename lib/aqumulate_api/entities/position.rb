@@ -14,7 +14,7 @@ module AqumulateAPI
         cost_basis: 'CostBasis'
     }
 
-    attr_accessor :id, :date, :ticket, :description, :asset_id, :asset_type, :price, :quantity, :market_value,
+    attr_accessor :id, :date, :ticker, :description, :asset_id, :asset_type, :price, :quantity, :market_value,
                   :cost_basis
   end
 end
