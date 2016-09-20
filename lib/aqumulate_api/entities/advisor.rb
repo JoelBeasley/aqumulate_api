@@ -65,6 +65,10 @@ module AqumulateAPI
       )
     end
 
+    def accounts(fi_id = nil)
+      Account.fetch(self, fi_id)
+    end
+
     private
 
     def create
