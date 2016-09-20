@@ -6,6 +6,7 @@ module AqumulateAPI
         login_account_id: 'FILoginAcctId',
         added_by: 'AccountAddedBy',
         financial_institution_id: 'FIId',
+        financial_institution_name: 'FIName',
         account_type: 'AccountType',
         account_type_extended: 'ExtendedAccountType',
         nick_name: 'NickNameAtFI',
@@ -27,10 +28,11 @@ module AqumulateAPI
         { key: 'Positions', class: Position, attr: :positions }
     ]
 
-    attr_accessor :id, :login_account_id, :added_by, :financial_institution_id, :account_type, :account_type_extended,
-                  :nick_name, :update_error_code, :retirement_status, :instrument, :ownership, :adv_access,
-                  :tracking_code, :last_update_status_code, :last_update_status_msg, :last_update_status_msg_fi,
-                  :last_update_attempt, :last_update, :account_balances, :positions
+    attr_accessor :id, :login_account_id, :added_by, :financial_institution_id, :financial_institution_name,
+                  :account_type, :account_type_extended, :nick_name, :update_error_code, :retirement_status,
+                  :instrument, :ownership, :adv_access, :tracking_code, :last_update_status_code,
+                  :last_update_status_msg, :last_update_status_msg_fi, :last_update_attempt, :last_update,
+                  :account_balances, :positions
 
     def self.fetch(advisor, fi_id = nil)
       body = { 'SessionId' => advisor.session_id }
