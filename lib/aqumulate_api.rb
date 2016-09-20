@@ -17,6 +17,7 @@ require 'aqumulate_api/entities/fetch_parameter'
 require 'aqumulate_api/entities/login_parameter'
 require 'aqumulate_api/entities/account_data'
 require 'aqumulate_api/entities/financial_institution'
+require 'aqumulate_api/entities/transaction'
 
 module AqumulateAPI
 
