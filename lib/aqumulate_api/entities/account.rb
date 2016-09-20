@@ -36,10 +36,10 @@ module AqumulateAPI
       body = { 'SessionId' => advisor.session_id }
 
       if fi_id.nil?
-        response = AggAccount.advisor_agg_get_account_for_fi(body)
+        response = AggAccount.advisor_get_aggregate_account(body)
       else
         body['FIId'] = fi_id
-        response = AggAccount.advisor_get_aggregate_account(body)
+        response = AggAccount.advisor_agg_get_account_for_fi(body)
       end
 
       return [] unless response.has_key?('Accounts')
