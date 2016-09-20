@@ -32,22 +32,16 @@ module AqumulateAPI
                   :tracking_code, :last_update_status_code, :last_update_status_msg, :last_update_status_msg_fi,
                   :last_update_attempt, :last_update, :account_balances, :positions
 
-    def self.find_by_fi(advisor, fi_id)
-      body = {
-          'SessionId' => advisor.session_id,
-          'FIId' => fi_id
-      }
+    def self.fetch(advisor, fi_id = nil)
+      body = { 'SessionId' => advisor.session_id }
 
-      response = AggAccount.advisor_agg_get_account_for_fi(body)
-      return [] unless response.has_key?('Accounts')
+      if fi_id.nil?
+        response = AggAccount.advisor_agg_get_account_for_fi(body)
+      else
+        body['FIId'] = fi_id
+        response = AggAccount.advisor_get_aggregate_account(body)
+      end
 
-      response['Accounts'].map { |source| from_source(source) }
-    end
-
-    def self.find_by_advisor(advisor)
-      body = {  'SessionId' => advisor.session_id }
-
-      response = AggAccount.advisor_get_aggregate_account(body)
       return [] unless response.has_key?('Accounts')
 
       response['Accounts'].map { |source| from_source(source) }
