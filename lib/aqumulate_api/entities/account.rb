@@ -43,7 +43,6 @@ module AqumulateAPI
         body['FIId'] = fi_id
         response = AggAccount.advisor_agg_get_account_for_fi(body)
       end
-
       return [] unless response.has_key?('Accounts')
 
       response['Accounts'].map { |source| from_source(source) }

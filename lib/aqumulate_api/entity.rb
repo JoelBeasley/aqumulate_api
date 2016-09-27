@@ -16,6 +16,7 @@ module AqumulateAPI
       end
 
       self::SOURCE_ASSOCIATIONS.each do |association|
+        next if source[association[:key]].nil? || source[association[:key]].empty?
         association_set = entity.send(association[:attr])
 
         source[association[:key]].each do |association_source|

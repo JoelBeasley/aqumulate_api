@@ -65,6 +65,9 @@ module AqumulateAPI
           body: body
       )
 
+      puts response.request.inspect
+      puts response.inspect
+
       handle_response response
     end
 
