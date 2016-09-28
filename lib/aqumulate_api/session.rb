@@ -47,9 +47,6 @@ module AqumulateAPI
 
       elsif response.code != 200
         raise RequestError.new(response.response.msg, response.response)
-
-      elsif response.parsed_response.is_a?(Hash) && response.parsed_response.has_key?('Status') && response.parsed_response['Status'].to_i != 200
-        raise RequestError.new(response.parsed_response['ErrorMessage'], response.parsed_response)
       end
 
       response.parsed_response
@@ -65,8 +62,10 @@ module AqumulateAPI
           body: body
       )
 
-      puts response.request.inspect
-      puts response.inspect
+      if config[:debug]
+        puts response.request.inspect
+        puts response.inspect
+      end
 
       handle_response response
     end

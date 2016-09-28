@@ -13,11 +13,12 @@ module AqumulateAPI
   end
 
   class Configuration
-    attr_accessor :grant_type, :password, :url, :username
+    attr_accessor :grant_type, :password, :url, :username, :debug
 
     def initialize
       @grant_type = 'password'
       @url = 'https://advagg.aqumulate.com'
+      @debug = false
     end
   end
 

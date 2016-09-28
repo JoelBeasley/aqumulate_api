@@ -45,9 +45,9 @@ module AqumulateAPI
 
       response = AggAccount.advisor_get_transactions_by_date(body)
 
-      # return [] unless response.has_key?('Transactions')
-      #
-      # response['Transactions'].map { |source| from_source(source) }
+      return [] unless response.has_key?('Transactions')
+
+      response['Transactions'].map { |source| from_source(source) }
     end
 
   end

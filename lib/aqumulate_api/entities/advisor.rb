@@ -23,6 +23,7 @@ module AqumulateAPI
 
     def self.find(user_id)
       response = AggAdvisor.get_advisor_by_id({ 'UserId' => user_id })
+      raise RequestError.new(response['ErrorMessage'], response) if response.has_key?('ErrorMessage')
 
       advisor = from_source(response)
       advisor.user_id = user_id
@@ -49,20 +50,8 @@ module AqumulateAPI
     end
 
     def destroy
-      AggAdvisor.delete_advisor({ 'UserID' => user_id, 'CEUserId' => ce_user_id })
+      AggAdvisor.delete_advisor({ 'UserID' => user_id })
       return true
-    end
-
-    def add_account(fi_id, login_parameters, fetch_parameters = [])
-      response = AggAccount.advisor_add_account(
-          {
-              'SessionId' => session_id,
-              'FIId' => fi_id,
-              'FIType' => 'Advisor',
-              'FIFetchParamList' => fetch_parameters,
-              'ParameterList' => login_parameters
-          }
-      )
     end
 
     def accounts(fi_id = nil)
@@ -72,7 +61,11 @@ module AqumulateAPI
     private
 
     def create
-      response = AggAdvisor.add_advisor(params)
+      request = params
+      request.delete('CEUserID')
+      response = AggAdvisor.add_advisor(request)
+      raise RequestError.new(response['ErrorMessage'], response) if response.has_key?('ErrorMessage')
+
       self.ce_user_id = response['CEUserID']
 
       return self
