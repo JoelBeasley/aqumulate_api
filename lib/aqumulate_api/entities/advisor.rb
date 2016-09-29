@@ -14,16 +14,15 @@ module AqumulateAPI
         city: 'City',
         state: 'StateProvidence',
         zip: 'ZipCode',
-        country: 'Country',
-        ce_user_id: 'CEUserID'
+        country: 'Country'
     }
 
     attr_accessor :user_id, :password, :first_name, :last_name, :email, :phone, :ssn, :address_1, :address_2, :city,
-                  :state, :zip, :country, :ce_user_id
+                  :state, :zip, :country, :persisted
 
     def self.find(user_id)
       response = AggAdvisor.get_advisor_by_id({ 'UserId' => user_id })
-      raise RequestError.new(response['ErrorMessage'], response) if response.has_key?('ErrorMessage')
+      AqumulateAPI.session.check_raise_request_error(response)
 
       advisor = from_source(response)
       advisor.user_id = user_id
@@ -42,7 +41,7 @@ module AqumulateAPI
     end
 
     def save
-      if ce_user_id.nil?
+      if !persisted
         create
       else
         update
@@ -61,12 +60,10 @@ module AqumulateAPI
     private
 
     def create
-      request = params
-      request.delete('CEUserID')
-      response = AggAdvisor.add_advisor(request)
-      raise RequestError.new(response['ErrorMessage'], response) if response.has_key?('ErrorMessage')
+      response = AggAdvisor.add_advisor(params)
+      AqumulateAPI.session.check_raise_request_error(response)
 
-      self.ce_user_id = response['CEUserID']
+      self.persisted = true
 
       return self
     end

@@ -62,12 +62,20 @@ module AqumulateAPI
           body: body
       )
 
-      if config[:debug]
+      if config.debug
         puts response.request.inspect
         puts response.inspect
       end
 
       handle_response response
+    end
+
+    def check_raise_request_error(response)
+      raise RequestError.new(response['ErrorMessage'], response) if response_has_error?(response)
+    end
+
+    def response_has_error?(response)
+      response.has_key?('ErrorMessage') && !response['ErrorMessage'].to_s.empty?
     end
 
   end
