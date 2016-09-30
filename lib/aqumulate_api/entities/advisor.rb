@@ -33,7 +33,7 @@ module AqumulateAPI
     def self.all
       response = AggAdvisor.get_advisors
       return [] unless response.has_key?('AdvisorList')
-      response['AdvisorList'].map { |source|  from_source(source) }
+      response['AdvisorList'].map { |source| from_source(source) }
     end
 
     def session_id(password = self.password)
@@ -55,6 +55,18 @@ module AqumulateAPI
 
     def accounts(fi_id = nil)
       Account.fetch(self, fi_id)
+    end
+
+    def add_account(fi_id, login_parameters, fetch_parameters)
+      response = AggAccount.advisor_add_account(
+          {
+              'SessionId' => session_id,
+              'FIId' => fi_id,
+              'FIType' => 'Advisor',
+              'FIFetchParamList' => fetch_parameters,
+              'ParameterList' => login_parameters
+          }
+      )
     end
 
     private
