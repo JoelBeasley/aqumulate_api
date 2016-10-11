@@ -61,10 +61,10 @@ module AqumulateAPI
       response = HTTParty.post(
           "#{config.url}/api/#{resource}",
           headers: {
-              'Accept' => 'application/json',
+              'Content-Type' => 'application/json',
               'Authorization' => "bearer #{auth['access_token']}"
           },
-          body: body
+          body: body.to_json
       )
 
       if config.debug

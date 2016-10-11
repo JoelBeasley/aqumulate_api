@@ -58,7 +58,7 @@ module AqumulateAPI
     end
 
     def add_account(fi_id, login_parameters, fetch_parameters)
-      response = AggAccount.advisor_add_account(
+      AggAccount.advisor_add_account(
           {
               'SessionId' => session_id,
               'FIId' => fi_id,
