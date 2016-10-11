@@ -38,6 +38,11 @@ module AqumulateAPI
           }
       )
 
+      if config.debug
+        puts response.request.inspect
+        puts response.inspect
+      end
+
       @auth = handle_response response
     end
 
