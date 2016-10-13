@@ -35,7 +35,8 @@ module AqumulateAPI
               grant_type: config.grant_type,
               'userName' => config.username,
               password: config.password
-          }
+          },
+          timeout: config.timeout
       )
 
       if config.debug
@@ -64,7 +65,8 @@ module AqumulateAPI
               'Content-Type' => 'application/json',
               'Authorization' => "bearer #{auth['access_token']}"
           },
-          body: body.to_json
+          body: body.to_json,
+          timeout: config.timeout
       )
 
       if config.debug
