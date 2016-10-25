@@ -69,6 +69,17 @@ module AqumulateAPI
       )
     end
 
+    def harvest_account(fi_id)
+      response = AggAccount.advisor_harvest_accounts(
+          {
+              'SessionId' => session_id,
+              'FIId' => fi_id,
+          }
+      )
+
+      HarvestAccount.from_source(response)
+    end
+
     private
 
     def create
